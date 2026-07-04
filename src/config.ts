@@ -11,8 +11,8 @@ export const config = {
   // Firebase Admin SDK — service account JSON, base64-encoded
   firebaseServiceAccountB64: process.env.FIREBASE_SERVICE_ACCOUNT_B64 || "",
 
-  // OpenAI
-  openaiApiKey: process.env.OPENAI_API_KEY || "",
+  // Cerebras (OpenAI-compatible — faster inference for real-time replies)
+  cerebrasApiKey: process.env.CEREBRAS_API_KEY || "",
 
   // Deepgram
   deepgramApiKey: process.env.DEEPGRAM_API_KEY || "",
