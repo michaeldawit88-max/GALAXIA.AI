@@ -3,11 +3,14 @@
  *
  * Takes the current conversation context (transcript of what's been said)
  * and generates a tactical, persuasive, or negotiation-optimised reply
- * using OpenAI.
+ * using Cerebras (OpenAI-compatible API).
+ *
+ * Cerebras offers sub-millisecond inference on CS-3 hardware — perfect for
+ * sub-500ms real-time conversation whisper replies.
  *
  * Models:
- *   - gpt-4o-mini (fast, low-latency) for most replies
- *   - gpt-4o (deeper reasoning) for complex negotiation scenarios
+ *   - gemma-4-31b (fast, low-latency) for most replies
+ *   - gpt-oss-120b (deeper reasoning) for complex negotiation scenarios
  *
  * The system prompt dynamically adjusts based on the conversation mode:
  *   "tactical", "psychological", "negotiation", or "general".

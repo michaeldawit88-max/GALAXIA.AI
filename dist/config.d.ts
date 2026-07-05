@@ -2,7 +2,7 @@ export declare const config: {
     port: number;
     nodeEnv: string;
     firebaseServiceAccountB64: string;
-    openaiApiKey: string;
+    cerebrasApiKey: string;
     deepgramApiKey: string;
     tursoDbUrl: string;
     tursoAuthToken: string;

@@ -9,8 +9,8 @@
  * sub-500ms real-time conversation whisper replies.
  *
  * Models:
- *   - cerebras-llama-3.3-70b (fast, low-latency) for most replies
- *   - cerebras-llama-3.1-8b (lighter) for simple queries
+ *   - gemma-4-31b (fast, low-latency) for most replies
+ *   - gpt-oss-120b (deeper reasoning) for complex negotiation scenarios
  *
  * The system prompt dynamically adjusts based on the conversation mode:
  *   "tactical", "psychological", "negotiation", or "general".
@@ -105,8 +105,8 @@ export async function generateReply(request: ReplyRequest): Promise<ReplyRespons
 
   const userPrompt = buildUserPrompt(request.context, objective, maxWords);
 
-  // Cerebras Llama-3.3-70b — fast enough for sub-second replies in all modes
-  const model = "cerebras-llama-3.3-70b";
+  // Gemma-4-31b — fast enough for sub-second replies in all modes
+  const model = "gemma-4-31b";
 
   const response = await client.chat.completions.create({
     model,

@@ -4,11 +4,14 @@
  *
  * Takes the current conversation context (transcript of what's been said)
  * and generates a tactical, persuasive, or negotiation-optimised reply
- * using OpenAI.
+ * using Cerebras (OpenAI-compatible API).
+ *
+ * Cerebras offers sub-millisecond inference on CS-3 hardware — perfect for
+ * sub-500ms real-time conversation whisper replies.
  *
  * Models:
- *   - gpt-4o-mini (fast, low-latency) for most replies
- *   - gpt-4o (deeper reasoning) for complex negotiation scenarios
+ *   - gemma-4-31b (fast, low-latency) for most replies
+ *   - gpt-oss-120b (deeper reasoning) for complex negotiation scenarios
  *
  * The system prompt dynamically adjusts based on the conversation mode:
  *   "tactical", "psychological", "negotiation", or "general".
@@ -43,30 +46,34 @@ conversation and suggest a natural, helpful response that advances the
 user's goals. Be concise and sound like a real person — not a robot.`,
 };
 // ---------------------------------------------------------------------------
-// OpenAI client
+// Cerebras client (OpenAI-compatible API)
 // ---------------------------------------------------------------------------
-let openaiClient = null;
-function getOpenAIClient() {
-    if (openaiClient)
-        return openaiClient;
-    if (!config_1.config.openaiApiKey) {
-        throw new Error("OPENAI_API_KEY is not configured");
+const CEREBRAS_BASE_URL = "https://api.cerebras.ai/v1";
+let cerebrasClient = null;
+function getCerebrasClient() {
+    if (cerebrasClient)
+        return cerebrasClient;
+    if (!config_1.config.cerebrasApiKey) {
+        throw new Error("CEREBRAS_API_KEY is not configured");
     }
-    openaiClient = new openai_1.default({ apiKey: config_1.config.openaiApiKey });
-    return openaiClient;
+    cerebrasClient = new openai_1.default({
+        apiKey: config_1.config.cerebrasApiKey,
+        baseURL: CEREBRAS_BASE_URL,
+    });
+    return cerebrasClient;
 }
 // ---------------------------------------------------------------------------
 // Generate reply
 // ---------------------------------------------------------------------------
 async function generateReply(request) {
     const start = Date.now();
-    const client = getOpenAIClient();
+    const client = getCerebrasClient();
     const systemPrompt = SYSTEM_PROMPTS[request.mode];
     const maxWords = request.maxWords ?? 30;
     const objective = request.objective ?? "advance the conversation effectively";
     const userPrompt = buildUserPrompt(request.context, objective, maxWords);
-    // Choose model based on complexity
-    const model = request.mode === "negotiation" ? "gpt-4o" : "gpt-4o-mini";
+    // Gemma-4-31b — fast enough for sub-second replies in all modes
+    const model = "gemma-4-31b";
     const response = await client.chat.completions.create({
         model,
         messages: [

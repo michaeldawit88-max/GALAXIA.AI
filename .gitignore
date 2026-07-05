@@ -7,3 +7,4 @@ dist/
 npm-debug.*
 .DS_Store
 *.log
+firebase-sa.json
